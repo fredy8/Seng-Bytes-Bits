@@ -27,11 +27,24 @@ public class VerArticulos extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             Template.writeHeader(out, "Publicaciones", request.getRequestURI());
-            
+            out.write("<h1>HEY</h1>");
             List<Articulo> articulos = Articulo.getAll();
-            
-            
-            
+        
+            String table;
+            table = "<table class='table'><thead><tr>" +
+                    "<th>LOL</th>" +
+                    "</tr></thead><tbody>";
+            out.write("<h1>table</h1>");
+
+            for (Articulo articulo : articulos) {
+                String html = "<td>" +
+                  "<tr>" +
+                    "<td>" + articulo.getTipoPublicacion() +"</td>" +
+                  "</tr>" +
+                "</td>";
+                out.write("<td>");
+            }
+            out.write("</tbody></table>");
             Template.writeFooter(out);
         }
     }

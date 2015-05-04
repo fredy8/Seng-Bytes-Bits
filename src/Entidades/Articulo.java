@@ -40,6 +40,11 @@ public class Articulo {
     }
     
     public void guardar() {
-        Database.update("INSERT INTO Articulo () VALUES ()", args);
+        Database.update("INSERT INTO Articulo () VALUES ()");
     }
+
+    public String getTipoPublicacion(){
+        return tipoPublicacion;
+    }
+
 }
