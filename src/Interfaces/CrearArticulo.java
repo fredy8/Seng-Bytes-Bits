@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,6 +45,8 @@ public class CrearArticulo extends HttpServlet {
         List<Integer> idEditores = Arrays.asList(request.getParameter("autores").split(",")).stream().mapToInt((String str) -> Integer.parseInt(str)).boxed().collect(Collectors.toList());
         
         new Articulo(titulo, texto, idEditores).guardar();
+        
+        response.sendRedirect("Articulos");
     }
     
     /**
