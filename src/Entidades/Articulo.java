@@ -44,7 +44,13 @@ public class Articulo {
     }
     
     public void guardar() {
-        Database.update("INSERT INTO Articulo () VALUES ()");
+        try {
+            Database.update("INSERT INTO Articulo (titulo, texto) VALUES ('%s', '%s')", this.titulo, this.texto);
+            ResultSet rs = Database.query("SELECT id FROM Articulo ORDER BY id DESC LIMIT 1");
+            this.id = !rs.next() ? -1 : rs.getInt(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public String getTitulo(){
