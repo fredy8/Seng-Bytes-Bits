@@ -26,7 +26,9 @@ public class Editor {
         try {
             ResultSet rs = Database.query("SELECT id, username, password, nombre, apellido FROM Editor");
             while(rs.next()) {
-                editores.add(new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido")));
+                Editor editor = new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"));
+                editor.id = rs.getInt("id");
+                editores.add(editor);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
