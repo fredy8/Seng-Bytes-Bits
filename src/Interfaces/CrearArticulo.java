@@ -57,12 +57,7 @@ public class CrearArticulo extends HttpServlet {
     protected void crearArticuloForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-//        List<Editor> editores = Editor.getAll();
-        List<Editor> editores = new ArrayList<>();
-        editores.add(new Editor("username", "password", "alfredo", "altamirano"));
-        editores.add(new Editor("username", "password", "alfredo", "altamirano"));
-        editores.add(new Editor("username", "password", "alfredo", "altamirano"));
-        editores.add(new Editor("username", "password", "alfredo", "altamirano"));
+        List<Editor> editores = Editor.getAll();
         
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
