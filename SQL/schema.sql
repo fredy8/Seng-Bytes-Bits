@@ -30,25 +30,27 @@ CREATE TABLE Suscripcion (
 	FOREIGN KEY(id_suscriptor) REFERENCES Suscriptor(id)
 );
 
-CREATE TABLE Articulo (
-	id INT NOT NULL AUTO_INCREMENT,
-	id_Revista INT,
-	texto VARCHAR(3000),
-	fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY(id)
-);
-
-CREATE TABLE Autores_Articulos (
-	id_Articulo INT NOT NULL,
-	id_Autor INT NOT NULL,
-	PRIMARY KEY(id_Articulo, id_Editor),
-	FOREIGN KEY(id_Articulo) REFERENCES Articulo(id),
-	FOREIGN KEY(id_Editor) REFERENCES Editor(id)
-);
-
 CREATE TABLE Revista (
 	id INT NOT NULL AUTO_INCREMENT,
 	mes INT NOT NULL,
 	anio INT NOT NULL,
 	PRIMARY KEY(id)
+);
+
+CREATE TABLE Articulo (
+	id INT NOT NULL AUTO_INCREMENT,
+	id_revista INT,
+	texto VARCHAR(3000),
+	titulo VARCHAR(100),
+	fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id),
+	FOREIGN KEY(id_revista) REFERENCES Revista(id)
+);
+
+CREATE TABLE Editores_Articulos (
+	id_articulo INT NOT NULL,
+	id_editor INT NOT NULL,
+	PRIMARY KEY(id_Articulo, id_Editor),
+	FOREIGN KEY(id_articulo) REFERENCES Articulo(id),
+	FOREIGN KEY(id_editor) REFERENCES Editor(id)
 );
