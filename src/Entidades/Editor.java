@@ -44,5 +44,26 @@ public class Editor {
     public String getFullName() {
         return nombre + " " + apellido; 
     }
+    
+    public static Editor authenticate(String username, String password) {
+        Editor editor = null;
+        try {
+            ResultSet rs = Database.query("SELECT id, username, password, nombre, apellido FROM Editor WHERE username = '%s' and password = '%s'", username, password);
+            if (!rs.next()) {
+                return null;
+            }
+            
+            editor = new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"));
+            editor.id = rs.getInt("id");
+        } catch (SQLException ex) {
+            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return editor;
+    }
+
+    public boolean canVote(Articulo articulo) {
+        return true;
+    }
 
 }

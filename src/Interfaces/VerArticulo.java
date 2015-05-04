@@ -5,9 +5,13 @@
  */
 package Interfaces;
 
+import Database.Database;
+import Entidades.Articulo;
 import Entidades.Editor;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +23,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author alfredo_altamirano
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
-public class Login extends HttpServlet {
+@WebServlet(name = "VerArticulo", urlPatterns = {"/Articulo"})
+public class VerArticulo extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,48 +35,41 @@ public class Login extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void getLogin(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        int id = Integer.parseInt(request.getParameter("id"));
+        Articulo articulo = Articulo.getById(id);
+        List<Editor> editores = articulo.getEditores();
+        
         try (PrintWriter out = response.getWriter()) {
-            Template.writeHeader(out, "Login", request.getRequestURI());
+            Template.writeHeader(out, articulo.getTitulo(), request.getRequestURI());
             
-            out.write("<div class='container-fluid login-container'>");
-            out.write("<form action='Login' method='POST'>");
-            out.write("Nombre de Usuario<input type='text' name='username' class='form-control'><br>");
-            out.write("Contraseña<input type='password' name='password' class='form-control'><br>");
-            out.write("<input type='submit' class='btn btn-primary btn-block' value='Ingresar'>");
-            out.write("</form>");
-            out.write("</div>");
+            out.write("<h3>Título</h3><br>");
+            out.write(articulo.getTitulo() + editores.size());
+            out.write("<h3>Texto</h3>");
+            out.write("<textarea class='form-control' readonly>" + articulo.getTexto() + "</textarea>");
+            
+            
+            out.write("<h3>Autores</h3>");
+            out.write("<ul>");
+            editores.forEach((Editor editor) -> {
+                out.write("<li>");
+                out.write(editor.getFullName());
+                out.write("</li>");
+            });
+            out.write("</ul>");
+            
+            HttpSession session = request.getSession();
+            Editor editor = (Editor) session.getAttribute("editor");
+            if (editor != null && editor.canVote(articulo)) {
+                out.write("<form action='votar?id=" + id + "' method='POST'>");
+                out.write("<input type='button' class='btn btn-primary pull-right' value='Votar'>");
+            }
             
             Template.writeFooter(out);
         }
-    }
-    
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void login(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        Editor editor = Editor.authenticate(username, password);
-        if (editor != null) {
-            HttpSession session = request.getSession();
-            session.setAttribute("editor", editor);
-            response.sendRedirect("Articulos");
-        } else {
-            response.sendRedirect("Login");
-        }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -87,7 +84,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        getLogin(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -101,7 +98,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        login(request, response);
+        processRequest(request, response);
     }
 
     /**

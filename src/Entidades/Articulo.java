@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class Articulo {
 
@@ -30,7 +31,9 @@ public class Articulo {
             while(rs.next()) {
                 int id = rs.getInt("Articulo.id");
                 if (!articulos.containsKey(id)) {
-                    articulos.put(id, new Articulo(rs.getString("titulo"), rs.getString("texto"), new ArrayList<>()));
+                    Articulo articulo = new Articulo(rs.getString("titulo"), rs.getString("texto"), new ArrayList<>());
+                    articulo.id = id;
+                    articulos.put(id, articulo);
                 }
                 
                 int idEditor = rs.getInt("Editor.id");
@@ -65,6 +68,48 @@ public class Articulo {
     }
 
     public String getResumen(){
+        return texto.substring(0, Math.min(texto.length(), 140)) + "...";
+    }
+    
+    public static Articulo getById(int id) {
+        Articulo articulo = null;
+        try {
+            ResultSet rs = Database.query("SELECT Articulo.id, titulo, texto, Editor.id from Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor WHERE Articulo.id = %s", id);
+            while(rs.next()) {
+                if (articulo == null) {
+                    articulo = new Articulo(rs.getString("titulo"), rs.getString("texto"), new ArrayList<>());
+                }
+                
+                articulo.idEditores.add(rs.getInt("Editor.id"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return articulo;
+    }
+    
+    public List<Editor> getEditores() {
+        List<Editor> editores = new ArrayList<>();
+        String ids = String.join(",", this.idEditores.stream().map((Integer id) -> Integer.toString(id)).collect(Collectors.toList()));
+        try {
+            ResultSet rs = Database.query("SELECT username, password, nombre, apellido FROM Editor WHERE id in (%s)", ids);
+            while(rs.next()) {
+                editores.add(new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return editores;
+    }
+
+    public String getTexto() {
         return texto;
     }
+
+    public int getId() {
+        return id;
+    }
+    
 }

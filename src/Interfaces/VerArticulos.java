@@ -40,7 +40,7 @@ public class VerArticulos extends HttpServlet {
 
             for (Articulo articulo : articulos) {
                 String html = "<tr>" +
-                    "<td>" + articulo.getTitulo() +"</td>" +
+                    "<td><a href='Articulo?id=" + articulo.getId() + "'>" + articulo.getTitulo() +"</a></td>" +
                     "<td>" + articulo.getResumen() +"</td>" +
                   "</tr>";
                 out.write(html);
