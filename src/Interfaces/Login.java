@@ -37,10 +37,10 @@ public class Login extends HttpServlet {
             
             out.write("<div class='container'>");
             out.write("<div class='container-fluid login-container'>");
-            out.write("<form>");
+            out.write("<form action='Login'>");
             out.write("Nombre de Usuario<input type='text' name='username' class='form-control'><br>");
             out.write("Contraseña<input type='password' name='password' class='form-control'><br>");
-            out.write("<input type='submit' class='btn btn-primary btn-block'>");
+            out.write("<input type='submit' class='btn btn-primary btn-block' value='Ingresar'>");
             out.write("</form>");
             out.write("</div>");
             out.write("</div>");
