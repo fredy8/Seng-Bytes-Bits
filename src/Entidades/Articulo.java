@@ -52,6 +52,6 @@ public class Articulo {
     }
 
     public String getResumen(){
-        return texto.substring(0,40) + "...";
+        return texto;
     }
 }
