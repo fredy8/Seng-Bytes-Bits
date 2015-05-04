@@ -63,7 +63,7 @@ public class CrearArticulo extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             Template.writeHeader(out, "Crear Articulo", request.getRequestURI());
             
-            out.write("<form action='CrearArticulo'>");
+            out.write("<form action='CrearArticulo' method='POST'>");
             out.write("<h3>Titulo<h3><input type='text' name='titulo' class='form-control'><br>");
             out.write("<h3>Texto<h3><textarea class='form-control' rows='6' name='texto'></textarea><br>");
             out.write("<h3>Autores</h3><br>");

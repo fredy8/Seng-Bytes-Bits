@@ -24,9 +24,9 @@ public class Articulo {
     }
 
     public static List<Articulo> getAll() {
-        ResultSet rs = Database.query("SELECT id, titulo, texto, Editor.id from Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor");
         Map<Integer, Articulo> articulos = new HashMap<>();
         try {
+            ResultSet rs = Database.query("SELECT id, titulo, texto, Editor.id from Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor");
             while(rs.next()) {
                 int id = rs.getInt("Articulo.id");
                 if (!articulos.containsKey(id)) {
@@ -44,6 +44,13 @@ public class Articulo {
     }
     
     public void guardar() {
+        try {
+            Database.update("INSERT INTO Articulo (titulo, texto) VALUES ('%s', '%s')", this.titulo, this.texto);
+            ResultSet rs = Database.query("SELECT id FROM Articulo ORDER BY id DESC LIMIT 1");
+            this.id = !rs.next() ? -1 : rs.getInt(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public String getTitulo(){
