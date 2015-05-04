@@ -76,8 +76,7 @@ public class CrearArticulo extends HttpServlet {
             out.write("</form>");
             
             Template.writeFooter(out);
-        }
-        
+        }        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
