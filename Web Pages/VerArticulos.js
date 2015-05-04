@@ -1,9 +1,9 @@
 $(function(){
 
-  $('tr').on('click', function(){
-    $('.info').removeClass('info');
+  $('tbody tr').on('click', function(){
+    $('.selected').removeClass('selected');
     var element = $(this);
-    element.addClass("info");
+    element.addClass("selected");
   });
 
 });

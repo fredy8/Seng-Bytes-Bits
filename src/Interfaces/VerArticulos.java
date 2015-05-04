@@ -30,10 +30,7 @@ public class VerArticulos extends HttpServlet {
             Template.writeHeader(out, "Publicaciones", request.getRequestURI());
             out.write("<h1 class='text-center'>Listado de Artículos</h1>");
 
-            List<Articulo> articulos = new ArrayList<>();
-            List<Integer> editores = new ArrayList<Integer>();
-            editores.add(1);
-            articulos.add(new Articulo("Hey", "Esta es una descripcion del articulo de blablabla", editores));
+            List<Articulo> articulos = Articulo.getAll();
             String table;
             table = "<table class='table'><thead><tr>" +
                     "<th style='width:30%;'>Título</th>" +
