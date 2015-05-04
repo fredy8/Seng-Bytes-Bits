@@ -21,15 +21,4 @@ public class Revista {
         this.articulos = new ArrayList<>(articulos);
     }
 
-    static Autor fromResultSet(ResultSet rs) {
-        return null;
-    }
-
-    public static void crearRevista(Revista revista) {
-
-    }
-
-    public static Revista getRevistaById(int id) {
-        return null;
-    }
 }

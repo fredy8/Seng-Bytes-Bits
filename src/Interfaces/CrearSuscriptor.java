@@ -5,8 +5,13 @@
  */
 package Interfaces;
 
+import Entidades.Articulo;
+import Entidades.Suscriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Beto
  */
-@WebServlet(name = "CrearSuscripcion", urlPatterns = {"/CrearSuscripcion"})
-public class CrearSuscripcion extends HttpServlet {
+@WebServlet(name = "CrearSuscriptor", urlPatterns = {"/CrearSuscriptor"})
+public class CrearSuscriptor extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,20 +34,42 @@ public class CrearSuscripcion extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void crearSuscriptor(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String nombre = request.getParameter("nombre");
+        String apellido = request.getParameter("apellido");
+        String direccion = request.getParameter("direccion");
+        
+        new Suscriptor(nombre, apellido, direccion).guardar();
+        response.sendRedirect("Suscriptores");
+    }
+    
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void crearSuscriptorForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        List<Suscriptor> suscriptores = Suscriptor.getAll();
+        
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CrearSuscripcion</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CrearSuscripcion at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            Template.writeHeader(out, "Crear Suscriptor", request.getRequestURI());
+            
+            out.write("<form action='CrearSuscriptor' method='POST'>");
+            out.write("<h3>Nombre<h3><input type='text' name='nombre' class='form-control'><br>");
+            out.write("<h3>Apellido<h3><input type='text' name='apellido' class='form-control'><br>");
+            out.write("<h3>Direccion<h3><input type='text' name='direccion' class='form-control'><br>");
+            out.write("<input type='submit' class='btn btn-primary btn-block' value='Ingresar'>");
+            out.write("</form>");
+            
+            Template.writeFooter(out);
         }
     }
 
@@ -58,7 +85,7 @@ public class CrearSuscripcion extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        crearSuscriptorForm(request, response);
     }
 
     /**
@@ -72,7 +99,7 @@ public class CrearSuscripcion extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        crearSuscriptor(request, response);
     }
 
     /**
