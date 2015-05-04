@@ -47,7 +47,11 @@ public class Articulo {
         Database.update("INSERT INTO Articulo () VALUES ()");
     }
 
-    public String getTipoPublicacion(){
-        return tipoPublicacion;
+    public String getTitulo(){
+        return titulo;
+    }
+
+    public String getResumen(){
+        return texto.substring(0,40) + "...";
     }
 }

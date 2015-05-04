@@ -3,6 +3,7 @@ package Interfaces;
 import Entidades.Articulo;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,22 +28,25 @@ public class VerArticulos extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             Template.writeHeader(out, "Publicaciones", request.getRequestURI());
-            out.write("<h1>HEY</h1>");
-            List<Articulo> articulos = Articulo.getAll();
-        
+            out.write("<h1 class='text-center'>Listado de Artículos</h1>");
+
+            List<Articulo> articulos = new ArrayList<>();
+            List<Integer> editores = new ArrayList<Integer>();
+            editores.add(1);
+            articulos.add(new Articulo("Hey", "Esta es una descripcion del articulo de blablabla", editores));
             String table;
             table = "<table class='table'><thead><tr>" +
-                    "<th>LOL</th>" +
+                    "<th style='width:30%;'>Título</th>" +
+                    "<th style='width:70%;'>Resumen Breve</th>" +
                     "</tr></thead><tbody>";
-            out.write("<h1>table</h1>");
+            out.write(table);
 
             for (Articulo articulo : articulos) {
-                String html = "<td>" +
-                  "<tr>" +
-                    "<td>" + articulo.getTipoPublicacion() +"</td>" +
-                  "</tr>" +
-                "</td>";
-                out.write("<td>");
+                String html = "<tr>" +
+                    "<td>" + articulo.getTitulo() +"</td>" +
+                    "<td>" + articulo.getResumen() +"</td>" +
+                  "</tr>";
+                out.write(html);
             }
             out.write("</tbody></table>");
             Template.writeFooter(out);
