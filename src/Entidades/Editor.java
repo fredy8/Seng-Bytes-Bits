@@ -15,12 +15,11 @@ public class Editor {
     private String username, password, nombre, apellido;
     private Timestamp fecha_de_miembro;
 
-    public Editor(String username, String password, String nombre, String apellido, Timestamp fecha_de_miembro, int tipo) {
+    public Editor(String username, String password, String nombre, String apellido, int tipo) {
         this.username = username;
         this.password = password;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.fecha_de_miembro = fecha_de_miembro;
         this.tipo = tipo;
     }
     
@@ -30,7 +29,7 @@ public class Editor {
         try {
             ResultSet rs = Database.query("SELECT id, username, password, nombre, apellido, tipo, fecha_de_miembro FROM Editor");
             while(rs.next()) {
-                Editor editor = new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"), rs.getTimestamp("fecha_de_miembro"), rs.getInt("tipo"));
+                Editor editor = new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"), rs.getInt("tipo"));
                 editor.id = rs.getInt("id");
                 editores.add(editor);
             }
@@ -38,6 +37,16 @@ public class Editor {
             Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
         }
         return editores;
+    }
+    
+    public void guardar() {
+        try {
+            Database.update("INSERT INTO Editor (username, password, nombre, apellido, tipo) VALUES ('%s', '%s', '%s', '%s', %d)", this.username, this.password, this.nombre, this.apellido, this.tipo);
+            ResultSet rs = Database.query("SELECT id FROM Editor ORDER BY id DESC LIMIT 1");
+            this.id = !rs.next() ? -1 : rs.getInt(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public int getId() {

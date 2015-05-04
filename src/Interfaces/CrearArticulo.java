@@ -76,7 +76,7 @@ public class CrearArticulo extends HttpServlet {
             });
             out.write("<input id='autores' name='autores' type='hidden'>");
             out.write("<script src='compilarAutores.js'></script>");
-            out.write("<input onclick='compilarAutores()' type='submit' class='btn btn-primary btn-block' value='Ingresar'>");
+            out.write("<input onclick='compilarAutores()' type='submit' class='btn btn-primary btn-block' value='Crear'>");
             out.write("</form>");
             
             Template.writeFooter(out);
