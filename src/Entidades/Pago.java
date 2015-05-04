@@ -2,7 +2,7 @@ package Entidades;
 
 import java.util.Date;
 
-class Pago {
+public class Pago {
 
     private Date fechaPago;
     private double cantidad;

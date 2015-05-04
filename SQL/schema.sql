@@ -2,72 +2,53 @@ DROP SCHEMA SENG_BYTES;
 CREATE SCHEMA SENG_BYTES;
 USE SENG_BYTES;
 
-CREATE TABLE Usuario (
+CREATE TABLE Editor (
+	id INT NOT NULL AUTO_INCREMENT,
+	username VARCHAR(100) NOT NULL,
+	password VARCHAR(100) NOT NULL,
+	nombre VARCHAR(100) NOT NULL,
+	apellido VARCHAR(100) NOT NULL,
+	tipo INT NOT NULL DEFAULT 0,
+	fecha_de_miembro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id)
+);
+
+CREATE TABLE Suscriptor (
 	id INT NOT NULL AUTO_INCREMENT,
 	nombre VARCHAR(100) NOT NULL,
 	apellido VARCHAR(100) NOT NULL,
-	password VARCHAR(100) NOT NULL,
-	fecha_de_nacimiento TIMESTAMP NOT NULL,
 	direccion VARCHAR(100) NOT NULL,
-	fecha_de_miembro TIMESTAMP NOT NULL,
-	tarjeta_de_credito VARCHAR(100) NOT NULL,
-	clave_de_tarjeta INT NOT NULL,
-	fecha_expiracion_tarjeta DATE NOT NULL,
-	PRIMARY KEY (id)
+	PRIMARY KEY(id)
 );
 
 CREATE TABLE Suscripcion (
 	id INT NOT NULL AUTO_INCREMENT,
-	id_usuario INT NOT NULL,
-	precio FLOAT NOT NULL,
-	fecha_vigencia TIMESTAMP NOT NULL,
+	id_suscriptor INT NOT NULL,
+	costo FLOAT NOT NULL,
+	duracion INT NOT NULL,
 	PRIMARY KEY(id),
-	FOREIGN KEY(id_usuario) REFERENCES Usuario(id)
-);
-
-CREATE TABLE Pago (
-	id INT NOT NULL AUTO_INCREMENT,
-	id_suscripcion INT NOT NULL,
-	fecha TIMESTAMP NOT NULL,
-	cantidad FLOAT NOT NULL,
-	PRIMARY KEY(id),
-	FOREIGN KEY(id_suscripcion) REFERENCES Suscripcion(id)
-);
-
-CREATE TABLE Juez (
-	id INT NOT NULL AUTO_INCREMENT,
-	id_usuario INT,
-	PRIMARY KEY(id),
-	FOREIGN KEY(id_usuario) REFERENCES Usuario(id)
-);
-
-CREATE TABLE Autor(
-	id INT NOT NULL AUTO_INCREMENT,
-	id_usuario INT NOT NULL,
-	permiso VARCHAR(100) NOT NULL,
-	tipo VARCHAR(100) NOT NULL,
-	publicacion_este_anio BOOL NOT NULL,
-	PRIMARY KEY(id),
-	FOREIGN KEY(id_usuario) REFERENCES Usuario(id)
+	FOREIGN KEY(id_suscriptor) REFERENCES Suscriptor(id)
 );
 
 CREATE TABLE Articulo (
 	id INT NOT NULL AUTO_INCREMENT,
-	id_juez INT,
-	id_autor INT,
-	tipo INT NOT NULL,
-	fecha_de_publicacion TIMESTAMP NOT NULL,
-	publicado BOOL NOT NULL,
-	autorizado BOOL NOT NULL,
-	PRIMARY KEY(id),
-	FOREIGN KEY(id_juez) REFERENCES Juez(id),
-	FOREIGN KEY(id_autor) REFERENCES Autor(id)
+	id_Revista INT,
+	texto VARCHAR(3000),
+	fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(id)
 );
 
-CREATE TABLE Revista(
+CREATE TABLE Autores_Articulos (
+	id_Articulo INT NOT NULL,
+	id_Autor INT NOT NULL,
+	PRIMARY KEY(id_Articulo, id_Editor),
+	FOREIGN KEY(id_Articulo) REFERENCES Articulo(id),
+	FOREIGN KEY(id_Editor) REFERENCES Editor(id)
+);
+
+CREATE TABLE Revista (
 	id INT NOT NULL AUTO_INCREMENT,
-	nombre VARCHAR(100) NOT NULL,
-	tiempo_de_publicacion DATE NOT NULL,
-	autorizado BOOLEAN NOT NULL,
+	mes INT NOT NULL,
+	anio INT NOT NULL,
 	PRIMARY KEY(id)
 );

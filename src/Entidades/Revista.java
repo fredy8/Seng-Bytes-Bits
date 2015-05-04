@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-class Revista {
+public class Revista {
 
     private int id;
     private String nombre, tipo;

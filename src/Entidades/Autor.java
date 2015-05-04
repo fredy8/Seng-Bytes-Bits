@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-class Autor extends Usuario {
+public class Autor extends Usuario {
 
     private String permiso, tipo;
     private boolean publicacionEsteAnio;

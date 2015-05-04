@@ -2,7 +2,7 @@ package Entidades;
 
 import java.sql.ResultSet;
 
-class Suscripcion {
+public class Suscripcion {
 
     private int id;
     private String tipo;
