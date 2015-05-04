@@ -24,9 +24,9 @@ public class Articulo {
     }
 
     public static List<Articulo> getAll() {
-        ResultSet rs = Database.query("SELECT id, titulo, texto, Editor.id from Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor");
         Map<Integer, Articulo> articulos = new HashMap<>();
         try {
+            ResultSet rs = Database.query("SELECT id, titulo, texto, Editor.id from Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor");
             while(rs.next()) {
                 int id = rs.getInt("Articulo.id");
                 if (!articulos.containsKey(id)) {
