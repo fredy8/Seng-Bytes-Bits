@@ -1,5 +1,6 @@
 package Entidades;
 
+import Database.Database;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,5 +21,5 @@ public class Revista {
         this.fechaPublicacion = fechaPublicacion;
         this.articulos = new ArrayList<>(articulos);
     }
-
+    
 }
