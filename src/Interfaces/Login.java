@@ -33,6 +33,12 @@ public class Login extends HttpServlet {
      */
     protected void getLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        if (request.getSession().getAttribute("editor") != null) {
+            response.sendRedirect("Articulos");
+            return;
+        }
+        
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             Template.writeHeader(out, "Login", request.getRequestURI());

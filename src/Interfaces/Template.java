@@ -40,7 +40,7 @@ public class Template {
             }
             out.println("</ul>");
             out.println("<ul class='nav navbar-nav navbar-right'>");
-            out.println("<li><a href='Salir'>Salir</a></li>");
+            out.println("<li><a href='Logout'>Salir</a></li>");
             out.println("</ul>");
         }
         out.println("</div'>");
