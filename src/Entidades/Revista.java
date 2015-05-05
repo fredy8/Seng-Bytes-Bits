@@ -4,7 +4,9 @@ import Database.Database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +25,7 @@ public class Revista {
         return id;
     }
     
-    public String getTitutlo() {
+    public String getTitulo() {
         return titulo;
     }
     
@@ -49,4 +51,20 @@ public class Revista {
         }
     }
     
+    public static List<Revista> getAll() throws SQLException {
+        Map<Integer, Revista> revistas = new HashMap<>();
+        
+        ResultSet rs = Database.query("SELECT Revista.id, Articulo.id, titulo FROM Revista JOIN Articulo ON Revista.id = Articulo.id ");
+        while(rs.next()) {
+            int id = rs.getInt("Revista.id");
+            if (!revistas.containsKey(id)) {
+                Revista revista = new Revista(rs.getString("titulo"), new ArrayList<>());
+                revista.id = id;
+            }
+            int idArticulo = rs.getInt("Articulo.id");
+            revistas.get(id).idArticulos.add(idArticulo);
+        }
+        
+        return new ArrayList<>(revistas.values());
+    }
 }

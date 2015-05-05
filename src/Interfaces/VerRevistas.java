@@ -5,10 +5,14 @@
  */
 package Interfaces;
 
+import Entidades.Articulo;
 import Entidades.Revista;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,26 +36,30 @@ public class VerRevistas extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             Template.writeHeader(out, "Revistas", request.getRequestURI());
                         
-            out.write("<h1>Lisatdo de Revistas</h1>");
+            out.write("<h1>Listado de Revistas</h1>");
             out.write("<table class='table'><thead><tr>");
             out.write("<th style='width:40%'>Título</th>");
             out.write("<th style='width:60%'>Artículos</th>");
             out.write("</tr></thead><tbody>");
             
             List<Revista> revistas = Revista.getAll();
+            // articulo.getById()
             
             for (Revista revista : revistas) {
-                int counter = 0;
+                Integer counter = 1;
                 out.write("<tr>");
-                // out.write("<td>" + revista.getTitulo() + "</td>");
+                out.write("<td>" + revista.getTitulo() + "</td>");
                 out.write("<td>");
                 
-                // for ()
+                for (Integer idArticulo : revista.getIdArticulos()) {
+                    Articulo articulo = Articulo.getById(idArticulo);
+                    out.write("<a href='Articulo?id=" + idArticulo.toString() + "'>" + counter.toString() + ")" + articulo.getTitulo() + " </a>");
+                }
                 
                 out.write("</td>");
                 out.write("</tr>");
@@ -75,7 +83,11 @@ public class VerRevistas extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(VerRevistas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
