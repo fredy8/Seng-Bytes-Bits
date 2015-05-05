@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 public class Editor {
 
-    private int id = -1, tipo;
+    int id = -1, tipo;
     private String username, password, nombre, apellido;
     private Timestamp fecha_de_miembro;
     private final int MAX_VOTES = 9;
@@ -81,6 +81,10 @@ public class Editor {
             return false;
         }
         
+        if (articulo.authorsPublishedRecently()) {
+            return false;
+        }
+        
         try {
             ResultSet rs = Database.query("SELECT COUNT(*) FROM Votos WHERE id_juez = %d", this.id);
             if (rs.next() && rs.getInt(1) >= MAX_VOTES) {
@@ -131,6 +135,17 @@ public class Editor {
 
     public boolean isChief() {
         return this.tipo == 2;
+    }
+
+    public boolean recentlyPublished() {
+        try {
+            ResultSet rs = Database.query("SELECT Editor.id AS editorId, Revista.id AS revistaId FROM Revista JOIN Articulo ON Articulo.id_revista = Revista.id JOIN Editores_Articulos ON Editores_Articulos.id_articulo = Articulo.id JOIN Editor ON Editor.id = Editores_Articulos.id_editor WHERE Editor.id = %d GROUP BY Editor.id ORDER BY revistaId DESC LIMIT 12;", this.id);
+            return rs.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false;
     }
 
 }

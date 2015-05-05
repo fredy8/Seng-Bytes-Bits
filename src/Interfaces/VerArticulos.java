@@ -47,6 +47,9 @@ public class VerArticulos extends HttpServlet {
                     out.write("<th style='width:25%;'>Título</th>");
                     out.write("<th style='width:55%;'>Resumen Breve</th>");
                     out.write("<th style='width:10%;'>Votos</th>");
+                } else {
+                    out.write("<th style='width:30%;'>Título</th>");
+                    out.write("<th style='width:70%;'>Resumen Breve</th>");
                 }
             } else {
                 out.write("<th style='width:30%;'>Título</th>");
@@ -56,8 +59,9 @@ public class VerArticulos extends HttpServlet {
             
             for (Articulo articulo : articulos) {
                 out.write("<tr>");
+                boolean autorReciente = articulo.authorsPublishedRecently();
                 if (editor != null && editor.isChief()) {
-                    out.write("<td><input class='articulo' name='" + articulo.getId() + "' type='checkbox' onclick='permitePublicacion(6, 9)'></td>");
+                    out.write("<td><input " + (articulo.publicado() || autorReciente ? "disabled='disabled' " : "") +  "class='articulo' name='" + articulo.getId() + "' type='checkbox' onclick='permitePublicacion(6, 9)'></td>");
                 }
                 out.write("<td><a href='Articulo?id=" + articulo.getId() + "'>" + articulo.getTitulo() + "</a></td>");
                 out.write("<td>" + articulo.getResumen() +"</td>");
@@ -66,22 +70,43 @@ public class VerArticulos extends HttpServlet {
                     if (editor.isJudge()) {
                         if (editor.voted(articulo.getId())) {
                             out.write("<span class='label label-default'>Votado</span>");
+                        } else if (autorReciente) {
+                            out.write("<span class='label label-default'>Autor Reciente</span>");
+                        } else if (editor.canVote(articulo)) {
+                            out.write("<form action='Votar?id=" + articulo.getId() + "' method='POST'>");
+                            out.write("<input type='submit' value='votar' class='btn btn-sm btn-primary'>");
+                            out.write("</form>");
                         }
                     } else if (editor.isChief()) {
-                        out.write(articulo.getVotos() + "");
+                        if (articulo.publicado()) {
+                            out.write("<span class='label label-default'>Publicado</span>");
+                        } else if (autorReciente) {
+                            out.write("<span class='label label-default'>Autor Reciente</span>");
+                        } else {
+                            out.write(articulo.getVotos() + "");
+                        }
                     }
                 }
                 out.write("</td>");
                 out.write("</tr>");
             }
             out.write("</tbody></table>");
-            out.write("<form class='form-inline' action='Publicar' method='POST'>");
+            out.write("<form class='form-inline'>");
             out.write("<button onclick=\"window.location.href = 'CrearArticulo'; return false; \" class='btn btn-primary'>Crear Articulo</button>");
             if (editor != null && editor.isChief()) {
+                out.write("<button class='btn btn-success' style='margin-left: 20px;' onclick=\"$('#publicacion').slideToggle(100); return false;\">Publicar</button>");
+                out.write("</form>");
+                out.write("<form class='form-inline' action='Publicar' method='POST'>");
+                out.write("<div id='publicacion'>");
                 out.write("<input type='hidden' id='articulos' name='articulos'>");
                 out.write("<script src='compilarArticulos.js'></script>");
-                out.write("<input onclick='compilarArticulos()' type='submit' style='margin: 20px;' class='btn btn-primary' id='publicar' disabled='disabled' value='Publicar Revista'>");
-                out.write("<input type='text' class='form-control' name='titulo' placeholder='Título'>");
+                out.write("<h3>Titulo</h2>");
+                out.write("<input type='text' class='form-control' style='width: 100%;' name='titulo'>");
+                out.write("<h2>Carta de Editor en Jefe</h2>");
+                out.write("<textarea class='form-control' rows='6' style='width: 100%;' name='carta'></textarea><br>");
+                out.write("<input onclick='compilarArticulos()' type='submit' style='margin-top: 20px' class='btn btn-primary' id='publicar' disabled='disabled' value='Publicar Revista'>");
+                out.write("</div>");
+                out.write("<script>$('#publicacion').slideToggle(100);</script>");
             }
             out.write("</form>");
             Template.writeFooter(out);
