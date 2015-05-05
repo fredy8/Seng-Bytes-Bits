@@ -22,8 +22,8 @@ public class Template {
     }
     
     public static void writeNavBar(PrintWriter out, String currentUrl) {
-        String items[] = {"Articulos", "Crear Artículo", "Suscripcion"};
-        String hrefs[] = {"Articulos", "CrearArticulo", "Suscripcion"};
+        String items[] = {"Articulos", "Crear Artículo", "Suscriptores", "Crear Suscriptor"};
+        String hrefs[] = {"Articulos", "CrearArticulo", "Suscriptores", "CrearSuscriptor"};
         
         out.println("<nav class='navbar navbar-default'>");
         out.println("<div class='container-fluid'>");
