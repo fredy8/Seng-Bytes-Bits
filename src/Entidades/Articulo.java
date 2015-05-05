@@ -28,7 +28,7 @@ public class Articulo {
     public static List<Articulo> getAll() {
         Map<Integer, Articulo> articulos = new HashMap<>();
         try {
-            ResultSet rs = Database.query("SELECT COUNT(id_juez) AS votos, Articulo.id, titulo, texto, Editor.id FROM Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor JOIN Votos ON Articulo.id = Votos.id_articulo GROUP BY Votos.id_articulo");
+            ResultSet rs = Database.query("SELECT COUNT(id_juez) AS votos, Articulo.id, titulo, texto, Editor.id FROM Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor LEFT JOIN Votos ON Articulo.id = Votos.id_articulo GROUP BY Articulo.id");
             while(rs.next()) {
                 int id = rs.getInt("Articulo.id");
                 if (!articulos.containsKey(id)) {
