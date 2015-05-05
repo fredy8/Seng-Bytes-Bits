@@ -76,7 +76,7 @@ public class VerArticulos extends HttpServlet {
             }
             out.write("</tbody></table>");
             out.write("<form class='form-inline' action='Publicar' method='POST'>");
-            out.write("<button action='CrearArticulo' class='btn btn-primary'>Crear Articulo</button>");
+            out.write("<a href='CrearArticulo' class='btn btn-primary'>Crear Articulo</a>");
             if (editor != null && editor.isChief()) {
                 out.write("<button type='submit' style='margin: 20px;' class='btn btn-primary'>Publicar Revista</button>");
             }

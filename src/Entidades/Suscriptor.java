@@ -19,7 +19,7 @@ public class Suscriptor {
     
     private int id = -1;
     private String nombre, apellido, direccion, tarjeta_de_credito;
-    private int tiempo_restante = 0;
+    private int tiempo_restante;
     
     public Suscriptor(String nombre, String apellido, String direccion, String tarjeta_de_credito) {
         this.nombre = nombre;
@@ -32,14 +32,15 @@ public class Suscriptor {
         List<Suscriptor> suscriptores = new ArrayList<>();
 
         try {
-            ResultSet rs = Database.query("SELECT id, nombre, apellido, direccion, tarjeta_de_credito FROM Suscriptor");
+            ResultSet rs = Database.query("SELECT id, nombre, apellido, direccion, tarjeta_de_credito, tiempo_restante FROM Suscriptor");
             while(rs.next()) {
                 Suscriptor suscriptor = new Suscriptor(rs.getString("nombre"), rs.getString("apellido"), rs.getString("direccion"), rs.getString("tarjeta_de_credito"));
                 suscriptor.id = rs.getInt("id");
+                suscriptor.tiempo_restante = rs.getInt("tiempo_restante");
                 suscriptores.add(suscriptor);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Suscriptor.class.getName()).log(Level.SEVERE, null, ex);
         }
         return suscriptores;
     }
@@ -98,9 +99,9 @@ public class Suscriptor {
     }
     
     public void setTiempoRestante(int years) throws SQLException{
-        int time = this.tiempo_restante + (years * 84600);
+        int time = this.tiempo_restante + (years * 31536000);
         this.tiempo_restante = time;
-        Database.update("UPDATE Suscriptor SET tiempo_restante = tiempo_restante + %d", time);
+        Database.update("UPDATE Suscriptor SET tiempo_restante = tiempo_restante + %d WHERE id = %d", time, this.id);
     }
     
 }

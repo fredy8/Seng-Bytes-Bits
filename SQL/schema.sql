@@ -19,7 +19,7 @@ CREATE TABLE Suscriptor (
 	apellido VARCHAR(100) NOT NULL,
 	direccion VARCHAR(100) NOT NULL,
 	tarjeta_de_credito VARCHAR(100) NOT NULL,
-	tiempo_restante BIGINT NOT NULL DEFAULT 0,
+	tiempo_restante INT NOT NULL DEFAULT 0,
 	PRIMARY KEY(id)
 );
 
