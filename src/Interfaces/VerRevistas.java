@@ -41,28 +41,30 @@ public class VerRevistas extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             Template.writeHeader(out, "Revistas", request.getRequestURI());
                         
-            out.write("<h1>Listado de Revistas</h1>");
+            out.write("<h1 class='text-center'>Listado de Revistas</h1>");
             out.write("<table class='table'><thead><tr>");
             out.write("<th style='width:40%'>Título</th>");
             out.write("<th style='width:60%'>Artículos</th>");
             out.write("</tr></thead><tbody>");
             
             List<Revista> revistas = Revista.getAll();
-            // articulo.getById()
+            
             
             for (Revista revista : revistas) {
                 Integer counter = 1;
                 out.write("<tr>");
-                out.write("<td>" + revista.getTitulo() + "</td>");
+                out.write("<td><b>" + revista.getTitulo() + "</b></td>");
                 out.write("<td>");
                 
                 for (Integer idArticulo : revista.getIdArticulos()) {
                     Articulo articulo = Articulo.getById(idArticulo);
-                    out.write("<a href='Articulo?id=" + idArticulo.toString() + "'>" + counter.toString() + ")" + articulo.getTitulo() + " </a>");
+                    out.write("<a href='Articulo?id=" + idArticulo.toString() + "'>" + counter.toString() + ".- <i>" + articulo.getTitulo() + "</i></a><br>");
+                    counter = counter + 1;
                 }
-                
+               
                 out.write("</td>");
                 out.write("</tr>");
+                
             }
             
             out.write("</tbody></table>");

@@ -5,6 +5,7 @@
  */
 package Interfaces;
 
+import Entidades.Editor;
 import Entidades.Suscriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -70,14 +72,28 @@ public class RenovarSuscripcion extends HttpServlet {
             htmlSelect += "</select><br><br>";
             
             out.write("<form action='RenovarSuscripcion' method='POST'>");
+            out.write("<h1 class='text-center'>Renovar Suscripcion</h1><br><hr>");
+            out.write("<div class='container-fluid'><div class='row'>");
+            out.write("<div class='col-md-6'>");
             out.write("<h3 class='inline'>Nombre: </h3><h3 class='thin inline'>" + suscriptor.getFullName() + "</h3><br><br>");
             out.write("<h3 class='inline'>Direccion: </h3><h3 class='thin inline'>" + suscriptor.getDireccion() + "</h3><br><br>");
             out.write("<h3 class='inline'>Tarjeta de Crédito: </h3><h3 class='thin inline'>" + suscriptor.getTarjeta() + "</h3><br><br>");
             out.write("<h3 class='inline'>Renovar por: </h3>" + htmlSelect);
             out.write("<input type='text' name='id' value='" + suscriptor.getId() + "' hidden>");
-            out.write("<input type='submit' class='btn btn-primary btn-block' value='Renovar'>");
+            out.write("</div>");
             
+            String discount = "Precio Completo";
+//            
+            out.write("<div class='col-md-6'>");
+            out.write("<h3 class='inline'>Descuento: <span id='discount' class='thin'>" +discount + "</span><h3><br>");
+            out.write("<h3 class='inline'>Descuento: <span class='thin'>" +discount + "</span><h3><br>");
+            out.write("<input type='checkbox' name='descuento' value='Descuento'> Descuento de Juez / Autor<br>");
+            out.write("</div>");
+            
+            out.write("</div></div>");
+            out.write("<input type='submit' class='btn btn-primary btn-block' value='Renovar'>");
             out.write("</form>");
+
             
             Template.writeFooter(out);
         }
