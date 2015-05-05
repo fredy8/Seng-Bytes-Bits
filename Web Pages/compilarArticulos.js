@@ -6,7 +6,6 @@ var compilarArticulos = function () {
         }
     });
     $('#articulos').val(articulos.join(','));
-    alert($('#articulos').val());
 };
 
 var permitePublicacion = function (min, max) {

@@ -40,7 +40,7 @@ public class Revista {
             this.id = !rs.next() ? -1 : rs.getInt(1);
             this.idArticulos.forEach((Integer idArticulo) -> {
                 try {
-                    Database.update("UPDATE Articulos SET id_revista = %d where id = %d", this.id, idArticulo);
+                    Database.update("UPDATE Articulo SET id_revista = %d where id = %d", this.id, idArticulo);
                 } catch (SQLException ex) {
                     Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
                 }
