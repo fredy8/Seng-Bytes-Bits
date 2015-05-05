@@ -22,8 +22,8 @@ public class Template {
     }
     
     public static void writeNavBar(PrintWriter out, String currentUrl) {
-        String items[] = {"Articulos", "Crear Artículo", "Suscriptores", "Crear Suscriptor", "Crear Editor"};
-        String hrefs[] = {"Articulos", "CrearArticulo", "Suscriptores", "CrearSuscriptor", "CrearEditor"};
+        String items[] = {"Articulos", "Suscriptores", "Crear Editor", "Revistas"};
+        String hrefs[] = {"Articulos", "Suscriptores", "CrearEditor", "Revistas"};
         
         out.println("<nav class='navbar navbar-default'>");
         out.println("<div class='container-fluid'>");
@@ -31,7 +31,7 @@ public class Template {
         out.println("<a class='navbar-brand' href='/Seng-Bytes-Bits/Articulos'>SEng Bytes & Bits</a>");
         out.println("<div id='navbar'>");
         
-        if (!currentUrl.equals("/Seng-Bytes-Bits/Login")) { 
+        if (!currentUrl.equals("/Seng-Bytes-Bits/Login")) {
             out.println("<ul class='nav navbar-nav'>");
             for (int i = 0; i < items.length; i++) {
                 out.println("<li>");
