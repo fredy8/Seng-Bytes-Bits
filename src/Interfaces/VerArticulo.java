@@ -5,12 +5,10 @@
  */
 package Interfaces;
 
-import Database.Database;
 import Entidades.Articulo;
 import Entidades.Editor;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ResultSet;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

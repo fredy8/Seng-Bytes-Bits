@@ -18,6 +18,7 @@ public class Articulo {
     private String titulo, texto;
     private List<Integer> idEditores;
     private int votos;
+    private boolean publicado = false;
 
     public Articulo(String titulo, String texto, List<Integer> editores) {
         this.titulo = titulo;
@@ -28,7 +29,7 @@ public class Articulo {
     public static List<Articulo> getAll() {
         Map<Integer, Articulo> articulos = new HashMap<>();
         try {
-            ResultSet rs = Database.query("SELECT COUNT(id_juez) AS votos, Articulo.id, titulo, texto, Editor.id FROM Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor LEFT JOIN Votos ON Articulo.id = Votos.id_articulo GROUP BY Articulo.id");
+            ResultSet rs = Database.query("SELECT COUNT(id_juez) AS votos, Articulo.id, titulo, texto, Editor.id, Articulo.id_revista FROM Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor LEFT JOIN Votos ON Articulo.id = Votos.id_articulo GROUP BY Articulo.id");
             while(rs.next()) {
                 int id = rs.getInt("Articulo.id");
                 if (!articulos.containsKey(id)) {
@@ -36,6 +37,7 @@ public class Articulo {
                     articulo.id = id;
                     articulo.votos = rs.getInt("votos");
                     articulos.put(id, articulo);
+                    articulo.publicado = rs.getInt("Articulo.id_revista") != 0;
                 }
                 
                 int idEditor = rs.getInt("Editor.id");
@@ -96,9 +98,11 @@ public class Articulo {
         List<Editor> editores = new ArrayList<>();
         String ids = String.join(",", this.idEditores.stream().map((Integer id) -> Integer.toString(id)).collect(Collectors.toList()));
         try {
-            ResultSet rs = Database.query("SELECT username, password, nombre, apellido, tipo, fecha_de_miembro FROM Editor WHERE id in (%s)", ids);
+            ResultSet rs = Database.query("SELECT id, username, password, nombre, apellido, tipo, fecha_de_miembro FROM Editor WHERE id in (%s)", ids);
             while(rs.next()) {
-                editores.add(new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"), rs.getInt("tipo")));
+                Editor editor = new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"), rs.getInt("tipo"));
+                editor.id = rs.getInt("id");
+                editores.add(editor);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,6 +132,15 @@ public class Articulo {
 
     public int getVotos() {
         return votos;
+    }
+    
+    public boolean publicado() {
+        return this.publicado;
+    }
+
+    public boolean authorsPublishedRecently() {
+        List<Editor> editores = this.getEditores();
+        return editores.stream().anyMatch((Editor e) -> e.recentlyPublished());
     }
     
 }
