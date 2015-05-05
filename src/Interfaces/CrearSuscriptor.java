@@ -39,8 +39,9 @@ public class CrearSuscriptor extends HttpServlet {
         String nombre = request.getParameter("nombre");
         String apellido = request.getParameter("apellido");
         String direccion = request.getParameter("direccion");
+        String tarjeta_de_credito = request.getParameter("tarjeta_de_credito");
         
-        new Suscriptor(nombre, apellido, direccion).guardar();
+        new Suscriptor(nombre, apellido, direccion, tarjeta_de_credito).guardar();
         response.sendRedirect("Suscriptores");
     }
     
@@ -66,6 +67,7 @@ public class CrearSuscriptor extends HttpServlet {
             out.write("<h3>Nombre</h3><input type='text' name='nombre' class='form-control'><br>");
             out.write("<h3>Apellido</h3><input type='text' name='apellido' class='form-control'><br>");
             out.write("<h3>Direccion</h3><input type='text' name='direccion' class='form-control'><br>");
+            out.write("<h3>Tarjeta de Crédito</h3><input type='text' name='tarjeta_de_credito' class='form-control'><br>");
             out.write("<input type='submit' class='btn btn-primary btn-block' value='Crear'>");
             out.write("</form>");
             

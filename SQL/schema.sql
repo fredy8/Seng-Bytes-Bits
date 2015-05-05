@@ -18,6 +18,7 @@ CREATE TABLE Suscriptor (
 	nombre VARCHAR(100) NOT NULL,
 	apellido VARCHAR(100) NOT NULL,
 	direccion VARCHAR(100) NOT NULL,
+	tarjeta_de_credito VARCHAR(100) NOT NULL,
 	PRIMARY KEY(id)
 );
 

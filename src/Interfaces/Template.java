@@ -28,7 +28,7 @@ public class Template {
         out.println("<nav class='navbar navbar-default'>");
         out.println("<div class='container-fluid'>");
         out.println("</div'>");
-        out.println("<a class='navbar-brand' href='#'>Logo</a>");
+        out.println("<a class='navbar-brand' href='/Seng-Bytes-Bits/Articulos'>SEng Bytes & Bits</a>");
         out.println("<div id='navbar'>");
         
         if (!currentUrl.equals("/Seng-Bytes-Bits/Login")) { 
