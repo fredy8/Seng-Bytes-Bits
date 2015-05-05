@@ -8,6 +8,9 @@ package Interfaces;
 import Entidades.Suscriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,9 +31,10 @@ public class RenovarSuscripcion extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.sql.SQLException
      */
     protected void renovarSuscripcion(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         int anios = Integer.parseInt(request.getParameter("tiempo_restante"));
         int id = Integer.parseInt(request.getParameter("id"));
         Suscriptor suscriptor = Suscriptor.getById(id);
@@ -105,7 +109,11 @@ public class RenovarSuscripcion extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        renovarSuscripcion(request, response);
+        try {
+            renovarSuscripcion(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(RenovarSuscripcion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
