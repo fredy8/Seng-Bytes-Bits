@@ -50,9 +50,9 @@ CREATE TABLE Articulo (
 
 CREATE TABLE Votos (
 	id_juez INT NOT NULL,
-	id_revista INT NOT NULL,
-	FOREIGN KEY(id_revista) REFERENCES Revista(id),
-	FOREIGN KEY(id_editor) REFERENCES Editor(id)
+	id_articulo INT NOT NULL,
+	FOREIGN KEY(id_articulo) REFERENCES Articulo(id),
+	FOREIGN KEY(id_juez) REFERENCES Editor(id)
 );
 
 CREATE TABLE Editores_Articulos (
@@ -62,3 +62,7 @@ CREATE TABLE Editores_Articulos (
 	FOREIGN KEY(id_articulo) REFERENCES Articulo(id),
 	FOREIGN KEY(id_editor) REFERENCES Editor(id)
 );
+
+INSERT INTO Editor (username, password, nombre, apellido, tipo) VALUES ('tangipony', '1234', 'Luis', 'Lamadrid', 1);
+INSERT INTO Editor (username, password, nombre, apellido) VALUES ('fredy', '1234', 'Alfredo', 'Altamirano');
+INSERT INTO Editor (username, password, nombre, apellido, tipo) VALUES ('chief', '1234', 'chief', '...', 2);
