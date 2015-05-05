@@ -5,3 +5,15 @@
 thead {
   background-color: #FFA0A0;
 }
+
+.thin {
+  font-weight: 300;
+}
+
+.inline {
+  display: inline;
+}
+
+.shorten {
+  width: 300px;
+}

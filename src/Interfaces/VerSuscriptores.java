@@ -5,6 +5,7 @@
  */
 package Interfaces;
 
+import Entidades.Editor;
 import Entidades.Suscriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -41,8 +43,10 @@ public class VerSuscriptores extends HttpServlet {
             List<Suscriptor> suscriptores = Suscriptor.getAll();
             String table;
             table = "<table class='table'><thead><tr>" +
-                    "<th style='width:40%;'>Nombre Completo</th>" +
-                    "<th style='width:60%;'>Dirección</th>" +
+                    "<th style='width:25%;'>Nombre Completo</th>" +
+                    "<th style='width:25%;'>Dirección</th>" +
+                    "<th style='width:25%;'>Suscripcion</th>" +
+                    "<th style='width:25%;'></th>" +
                     "</tr></thead><tbody>";
             out.write(table);
 
@@ -50,11 +54,15 @@ public class VerSuscriptores extends HttpServlet {
                 String html = "<tr>" +
                     "<td>" + suscriptor.getFullName() +"</td>" +
                     "<td>" + suscriptor.getDireccion() +"</td>" +
+                    "<td>" + suscriptor.getVencimiento() +"</td>" +
+                    "<td><a href='RenovarSuscripcion?id=" + suscriptor.getId() + 
+                        "' class='btn btn-sm btn-primary pull-right'>Renovar Suscripción</a>" +
+                    "</td>" +
                   "</tr>";
                 out.write(html);
             }
             out.write("</tbody></table>");
-            out.write("<a href='/Seng-Bytes-Bits/CrearSuscriptor' class='btn btn-primary'>Crear Suscriptor</a>");
+            out.write("<a href='CrearSuscriptor' class='btn btn-primary'>Crear Suscriptor</a>");
             Template.writeFooter(out);
         }
     }

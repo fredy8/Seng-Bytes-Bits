@@ -1,2 +1,2 @@
 INSERT INTO Editor (username, password, nombre, apellido) VALUES ('username', 'password', 'Alfredo', 'Altamirano');
-INSERT INTO Editor (username, password, nombre, apellido, tipo) VALUES ('tangipony', '1234', 'Luis', 'Lamadrid');
+INSERT INTO Editor (username, password, nombre, apellido, tipo) VALUES ('tangipony', '1234', 'Luis', 'Lamadrid', 1);

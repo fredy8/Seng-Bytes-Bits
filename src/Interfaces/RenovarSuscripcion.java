@@ -5,13 +5,12 @@
  */
 package Interfaces;
 
-import Entidades.Articulo;
 import Entidades.Suscriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,26 +21,24 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Beto
  */
-@WebServlet(name = "CrearSuscriptor", urlPatterns = {"/CrearSuscriptor"})
-public class CrearSuscriptor extends HttpServlet {
+@WebServlet(name = "RenovarSuscripcion", urlPatterns = {"/RenovarSuscripcion"})
+public class RenovarSuscripcion extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.sql.SQLException
      */
-    protected void crearSuscriptor(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String nombre = request.getParameter("nombre");
-        String apellido = request.getParameter("apellido");
-        String direccion = request.getParameter("direccion");
-        String tarjeta_de_credito = request.getParameter("tarjeta_de_credito");
-        
-        new Suscriptor(nombre, apellido, direccion, tarjeta_de_credito).guardar();
+    protected void renovarSuscripcion(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int anios = Integer.parseInt(request.getParameter("tiempo_restante"));
+        int id = Integer.parseInt(request.getParameter("id"));
+        Suscriptor suscriptor = Suscriptor.getById(id);
+        suscriptor.setTiempoRestante(anios);
         response.sendRedirect("Suscriptores");
     }
     
@@ -54,19 +51,32 @@ public class CrearSuscriptor extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void crearSuscriptorForm(HttpServletRequest request, HttpServletResponse response)
+    protected void renovarSuscripcionForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         response.setContentType("text/html;charset=UTF-8");
+
+        int id = Integer.parseInt(request.getParameter("id"));
+        Suscriptor suscriptor = Suscriptor.getById(id);
+        
         try (PrintWriter out = response.getWriter()) {
-            Template.writeHeader(out, "Crear Suscriptor", request.getRequestURI());
+            Template.writeHeader(out, "Renovar Suscripción", request.getRequestURI());
             
-            out.write("<form action='CrearSuscriptor' method='POST'>");
-            out.write("<h3>Nombre</h3><input type='text' name='nombre' class='form-control'><br>");
-            out.write("<h3>Apellido</h3><input type='text' name='apellido' class='form-control'><br>");
-            out.write("<h3>Direccion</h3><input type='text' name='direccion' class='form-control'><br>");
-            out.write("<h3>Tarjeta de Crédito</h3><input type='text' name='tarjeta_de_credito' class='form-control'><br>");
-            out.write("<input type='submit' class='btn btn-primary btn-block' value='Crear'>");
+            String options[] = {"1 año", "2 años", "3 años", "4 años", "5 años", "6 años", "7 años", "8 años"};
+            String values[] = {"1", "2", "3", "4", "5", "6", "7", "8"};
+            String htmlSelect = "<select name='tiempo_restante' class='inline form-control shorten'>";
+            for(int i = 0; i < options.length ; i++){
+                htmlSelect += "<option value='" + values[i] + "'>" + options[i] + "</option>";
+            }
+            htmlSelect += "</select><br><br>";
+            
+            out.write("<form action='RenovarSuscripcion' method='POST'>");
+            out.write("<h3 class='inline'>Nombre: </h3><h3 class='thin inline'>" + suscriptor.getFullName() + "</h3><br><br>");
+            out.write("<h3 class='inline'>Direccion: </h3><h3 class='thin inline'>" + suscriptor.getDireccion() + "</h3><br><br>");
+            out.write("<h3 class='inline'>Tarjeta de Crédito: </h3><h3 class='thin inline'>" + suscriptor.getTarjeta() + "</h3><br><br>");
+            out.write("<h3 class='inline'>Renovar por: </h3>" + htmlSelect);
+            out.write("<input type='text' name='id' value='" + suscriptor.getId() + "' hidden>");
+            out.write("<input type='submit' class='btn btn-primary btn-block' value='Renovar'>");
+            
             out.write("</form>");
             
             Template.writeFooter(out);
@@ -85,7 +95,7 @@ public class CrearSuscriptor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        crearSuscriptorForm(request, response);
+        renovarSuscripcionForm(request, response);
     }
 
     /**
@@ -99,7 +109,11 @@ public class CrearSuscriptor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        crearSuscriptor(request, response);
+        try {
+            renovarSuscripcion(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(RenovarSuscripcion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
