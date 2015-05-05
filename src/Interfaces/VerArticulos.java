@@ -69,6 +69,7 @@ public class VerArticulos extends HttpServlet {
                 out.write("</tr>");
             }
             out.write("</tbody></table>");
+            out.write("<a href='/Seng-Bytes-Bits/CrearArticulo' class='btn btn-primary'>Crear Articulo</a>");
             Template.writeFooter(out);
         }
     }

@@ -16,21 +16,22 @@ import java.util.logging.Logger;
 public class Suscriptor {
     
     private int id = -1;
-    private String nombre, apellido, direccion;
+    private String nombre, apellido, direccion, tarjeta_de_credito;
     
-    public Suscriptor(String nombre, String apellido, String direccion) {
+    public Suscriptor(String nombre, String apellido, String direccion, String tarjeta_de_credito) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
+        this.tarjeta_de_credito = tarjeta_de_credito;
     }
     
     public static List<Suscriptor> getAll() {
         List<Suscriptor> suscriptores = new ArrayList<>();
 
         try {
-            ResultSet rs = Database.query("SELECT id, nombre, apellido, direccion FROM Suscriptor");
+            ResultSet rs = Database.query("SELECT id, nombre, apellido, direccion, tarjeta_de_credito FROM Suscriptor");
             while(rs.next()) {
-                Suscriptor suscriptor = new Suscriptor(rs.getString("nombre"), rs.getString("apellido"), rs.getString("direccion"));
+                Suscriptor suscriptor = new Suscriptor(rs.getString("nombre"), rs.getString("apellido"), rs.getString("direccion"), rs.getString("tarjeta_de_credito"));
                 suscriptor.id = rs.getInt("id");
                 suscriptores.add(suscriptor);
             }
@@ -42,7 +43,7 @@ public class Suscriptor {
 
     public void guardar() {
         try {
-            Database.update("INSERT INTO Suscriptor (nombre, apellido, direccion) VALUES ('%s', '%s', '%s')", this.nombre, this.apellido, this.direccion);
+            Database.update("INSERT INTO Suscriptor (nombre, apellido, direccion, tarjeta_de_credito) VALUES ('%s', '%s', '%s', '%s')", this.nombre, this.apellido, this.direccion, this.tarjeta_de_credito);
             ResultSet rs = Database.query("SELECT id FROM Suscriptor ORDER BY id DESC LIMIT 1");
             this.id = !rs.next() ? -1 : rs.getInt(1);
         } catch (SQLException ex) {
