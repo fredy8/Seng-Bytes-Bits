@@ -8,7 +8,9 @@ package Entidades;
 import Database.Database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +19,7 @@ public class Suscriptor {
     
     private int id = -1;
     private String nombre, apellido, direccion, tarjeta_de_credito;
+    private int tiempo_restante = 0;
     
     public Suscriptor(String nombre, String apellido, String direccion, String tarjeta_de_credito) {
         this.nombre = nombre;
@@ -62,4 +65,42 @@ public class Suscriptor {
     public String getDireccion() {
         return direccion;
     }
+    
+    public String getVencimiento() {
+        String answer = "No Existente";
+        if (this.tiempo_restante > 86399) { // 86399 less than a day
+            Calendar date = Calendar.getInstance();
+            date.add(Calendar.SECOND, this.tiempo_restante);
+            SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+            answer = dateParser.format(date.getTime());
+        }
+        return answer;
+    }
+    
+    public String getTarjeta(){
+        return tarjeta_de_credito;
+    }
+    
+    public static Suscriptor getById(int id){
+        Suscriptor suscriptor = null;
+      
+        try {
+            ResultSet rs = Database.query("SELECT * FROM Suscriptor WHERE id = %d", id);
+            if (rs.next()){
+                suscriptor = new Suscriptor(rs.getString("nombre"), rs.getString("apellido"), rs.getString("direccion"), rs.getString("tarjeta_de_credito"));
+                suscriptor.id = rs.getInt("id");
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(Suscriptor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return suscriptor;
+    }
+    
+    public void setTiempoRestante(int years) throws SQLException{
+        int time = this.tiempo_restante + (years * 84600);
+        this.tiempo_restante = time;
+        Database.update("UPDATE Suscriptor SET tiempo_restante = tiempo_restante + %d", time);
+    }
+    
 }
