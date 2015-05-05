@@ -57,7 +57,7 @@ public class VerArticulos extends HttpServlet {
             for (Articulo articulo : articulos) {
                 out.write("<tr>");
                 if (editor != null && editor.isChief()) {
-                    out.write("<td><input type='checkbox'></td>");
+                    out.write("<td><input class='articulo' name='" + articulo.getId() + "' type='checkbox' onclick='permitePublicacion(6, 9)'></td>");
                 }
                 out.write("<td><a href='Articulo?id=" + articulo.getId() + "'>" + articulo.getTitulo() + "</a></td>");
                 out.write("<td>" + articulo.getResumen() +"</td>");
@@ -76,9 +76,11 @@ public class VerArticulos extends HttpServlet {
             }
             out.write("</tbody></table>");
             out.write("<form class='form-inline' action='Publicar' method='POST'>");
-            out.write("<button action='CrearArticulo' class='btn btn-primary'>Crear Articulo</button>");
+            out.write("<button onclick=\"window.location.href = 'CrearArticulo'; return false; \" class='btn btn-primary'>Crear Articulo</button>");
             if (editor != null && editor.isChief()) {
-                out.write("<button type='submit' style='margin: 20px;' class='btn btn-primary'>Publicar Revista</button>");
+                out.write("<input type='hidden' id='articulos'>");
+                out.write("<script src='compilarArticulos.js'></script>");
+                out.write("<input onclick='compilarArticulos()' type='submit' style='margin: 20px;' class='btn btn-primary' id='publicar' disabled='disabled' value='Publicar Revista'>");
             }
             out.write("</form>");
             Template.writeFooter(out);
