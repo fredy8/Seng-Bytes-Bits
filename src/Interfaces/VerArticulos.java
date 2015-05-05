@@ -38,11 +38,14 @@ public class VerArticulos extends HttpServlet {
             List<Articulo> articulos = Articulo.getAll();
             out.write("<table class='table'><thead><tr>");
             if (editor != null) {
-                out.write("<th style='width:25%;'>Título</th>");
-                out.write("<th style='width:65%;'>Resumen Breve</th>");
                 if (editor.isJudge()) {
+                    out.write("<th style='width:25%;'>Título</th>");
+                    out.write("<th style='width:65%;'>Resumen Breve</th>");
                     out.write("<th style='width:10%;'>Votado</th>");
                 } else if (editor.isChief()) {
+                    out.write("<th style='width:10%;'>Publicar</th>");
+                    out.write("<th style='width:25%;'>Título</th>");
+                    out.write("<th style='width:55%;'>Resumen Breve</th>");
                     out.write("<th style='width:10%;'>Votos</th>");
                 }
             } else {
@@ -53,6 +56,9 @@ public class VerArticulos extends HttpServlet {
             
             for (Articulo articulo : articulos) {
                 out.write("<tr>");
+                if (editor != null && editor.isChief()) {
+                    out.write("<td><input type='checkbox'></td>");
+                }
                 out.write("<td><a href='Articulo?id=" + articulo.getId() + "'>" + articulo.getTitulo() + "</a></td>");
                 out.write("<td>" + articulo.getResumen() +"</td>");
                 out.write("<td>");
@@ -69,7 +75,12 @@ public class VerArticulos extends HttpServlet {
                 out.write("</tr>");
             }
             out.write("</tbody></table>");
-            out.write("<a href='/Seng-Bytes-Bits/CrearArticulo' class='btn btn-primary'>Crear Articulo</a>");
+            out.write("<form class='form-inline' action='Publicar' method='POST'>");
+            out.write("<button action='CrearArticulo' class='btn btn-primary'>Crear Articulo</button>");
+            if (editor != null && editor.isChief()) {
+                out.write("<button type='submit' style='margin: 20px;' class='btn btn-primary'>Publicar Revista</button>");
+            }
+            out.write("</form>");
             Template.writeFooter(out);
         }
     }
