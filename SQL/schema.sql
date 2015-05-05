@@ -41,6 +41,13 @@ CREATE TABLE Articulo (
 	FOREIGN KEY(id_revista) REFERENCES Revista(id)
 );
 
+CREATE TABLE Votos (
+	id_juez INT NOT NULL,
+	id_revista INT NOT NULL,
+	FOREIGN KEY(id_revista) REFERENCES Revista(id),
+	FOREIGN KEY(id_editor) REFERENCES Editor(id)
+);
+
 CREATE TABLE Editores_Articulos (
 	id_articulo INT NOT NULL,
 	id_editor INT NOT NULL,

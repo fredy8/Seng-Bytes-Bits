@@ -17,6 +17,7 @@ public class Articulo {
     private int id = -1;
     private String titulo, texto;
     private List<Integer> idEditores;
+    private int votos;
 
     public Articulo(String titulo, String texto, List<Integer> editores) {
         this.titulo = titulo;
@@ -27,12 +28,13 @@ public class Articulo {
     public static List<Articulo> getAll() {
         Map<Integer, Articulo> articulos = new HashMap<>();
         try {
-            ResultSet rs = Database.query("SELECT Articulo.id, titulo, texto, Editor.id from Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor");
+            ResultSet rs = Database.query("SELECT COUNT(id_juez) AS votos, Articulo.id, titulo, texto, Editor.id FROM Articulo JOIN Editores_Articulos on id_articulo = Articulo.id JOIN Editor ON Editor.id = id_editor JOIN Votos ON Articulo.id = Votos.id_articulo GROUP BY Votos.id_articulo");
             while(rs.next()) {
                 int id = rs.getInt("Articulo.id");
                 if (!articulos.containsKey(id)) {
                     Articulo articulo = new Articulo(rs.getString("titulo"), rs.getString("texto"), new ArrayList<>());
                     articulo.id = id;
+                    articulo.votos = rs.getInt("votos");
                     articulos.put(id, articulo);
                 }
                 
@@ -78,6 +80,7 @@ public class Articulo {
             while(rs.next()) {
                 if (articulo == null) {
                     articulo = new Articulo(rs.getString("titulo"), rs.getString("texto"), new ArrayList<>());
+                    articulo.id = rs.getInt("Articulo.id");
                 }
                 
                 articulo.idEditores.add(rs.getInt("Editor.id"));
@@ -110,6 +113,21 @@ public class Articulo {
 
     public int getId() {
         return id;
+    }
+
+    boolean isPublished() {
+        try {
+            ResultSet rs = Database.query("SELECT id FROM Articulo WHERE id_revista IS NOT NULL AND id = %d", this.id);
+            return rs.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false;
+    }
+
+    public int getVotos() {
+        return votos;
     }
     
 }

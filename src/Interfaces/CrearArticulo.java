@@ -9,13 +9,9 @@ import Entidades.Articulo;
 import Entidades.Editor;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -61,7 +57,7 @@ public class CrearArticulo extends HttpServlet {
     protected void crearArticuloForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        List<Editor> editores = Editor.getAll();
+        List<Editor> editores = Editor.getAllAuthors();
         
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
