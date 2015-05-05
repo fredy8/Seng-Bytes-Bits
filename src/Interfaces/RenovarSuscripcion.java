@@ -83,11 +83,11 @@ public class RenovarSuscripcion extends HttpServlet {
             out.write("</div>");
             
             String discount = "Precio Completo";
-//            
+            
             out.write("<div class='col-md-6'>");
-            out.write("<h3 class='inline'>Descuento: <span id='discount' class='thin'>" +discount + "</span><h3><br>");
-            out.write("<h3 class='inline'>Descuento: <span class='thin'>" +discount + "</span><h3><br>");
-            out.write("<input type='checkbox' name='descuento' value='Descuento'> Descuento de Juez / Autor<br>");
+            out.write("<h3 class='inline'>Descuento: <span id='discount' class='thin'>" +discount + "</span><h3>");
+            out.write("<h3 class='inline'>Descuento Extra: <span id='extra_discount' class='thin'> - </span><h3><br>");
+            out.write("<input type='checkbox' name='descuento' id='check' value='Descuento'> Descuento de Juez / Autor<br>");
             out.write("</div>");
             
             out.write("</div></div>");

@@ -14,6 +14,7 @@ public class Template {
         out.println("<script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>");
         out.println("<script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>");
         out.println("<script src='VerArticulos.js'></script>");
+        out.println("<script src='renovarSuscripcion.js'></script>");
         out.println("</head>");
         out.println("<body>");
         writeNavBar(out, url);
