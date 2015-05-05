@@ -19,15 +19,21 @@ CREATE TABLE Suscriptor (
 	apellido VARCHAR(100) NOT NULL,
 	direccion VARCHAR(100) NOT NULL,
 	tarjeta_de_credito VARCHAR(100) NOT NULL,
-	tiempo_restante INT NOT NULL DEFAULT 0,
 	PRIMARY KEY(id)
 );
 
+CREATE TABLE Suscripcion (
+	id INT NOT NULL AUTO_INCREMENT,
+	id_suscriptor INT NOT NULL,
+	costo FLOAT NOT NULL,
+	duracion INT NOT NULL,
+	PRIMARY KEY(id),
+	FOREIGN KEY(id_suscriptor) REFERENCES Suscriptor(id)
+);
 
 CREATE TABLE Revista (
 	id INT NOT NULL AUTO_INCREMENT,
-	mes INT NOT NULL,
-	anio INT NOT NULL,
+	titulo VARCHAR(100) NOT NULL,
 	PRIMARY KEY(id)
 );
 

@@ -5,8 +5,12 @@
  */
 package Interfaces;
 
+import Entidades.Revista;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,6 +35,10 @@ public class Publicar extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        List<Integer> idArticulos = Arrays.asList(request.getParameter("articulos").split(",")).stream().mapToInt((String str) -> Integer.parseInt(str)).boxed().collect(Collectors.toList());
+        String titulo = request.getParameter("titulo");
+        new Revista(titulo, idArticulos).guardar();
         
         response.sendRedirect("Articulos");
         
