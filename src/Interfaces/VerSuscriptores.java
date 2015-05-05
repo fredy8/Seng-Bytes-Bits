@@ -35,7 +35,7 @@ public class VerSuscriptores extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            Template.writeHeader(out, "Publicaciones", request.getRequestURI());
+            Template.writeHeader(out, "Suscriptores", request.getRequestURI());
             out.write("<h1 class='text-center'>Listado de Suscriptores</h1>");
 
             List<Suscriptor> suscriptores = Suscriptor.getAll();
