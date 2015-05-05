@@ -73,7 +73,7 @@ public class Suscriptor {
             Calendar date = Calendar.getInstance();
             date.add(Calendar.SECOND, this.tiempo_restante);
             SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
-            answer = dateParser.format(date.getTime());
+            answer = "Vence: " + dateParser.format(date.getTime());
         }
         return answer;
     }
