@@ -24,11 +24,11 @@ public class Editor {
         this.tipo = tipo;
     }
     
-    public static List<Editor> getAll() {
+    public static List<Editor> getAllAuthors() {
         List<Editor> editores = new ArrayList<>();
 
         try {
-            ResultSet rs = Database.query("SELECT id, username, password, nombre, apellido, tipo, fecha_de_miembro FROM Editor");
+            ResultSet rs = Database.query("SELECT id, username, password, nombre, apellido, tipo, fecha_de_miembro FROM Editor WHERE tipo = 0");
             while(rs.next()) {
                 Editor editor = new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"), rs.getInt("tipo"));
                 editor.id = rs.getInt("id");
@@ -76,25 +76,61 @@ public class Editor {
     }
 
     public boolean canVote(Articulo articulo) {
+        int articuloId = articulo.getId();
         if (this.tipo != 1) {
             return false;
         }
         
         try {
-            ResultSet rs = Database.query("SELECT COUNT(*) Votos WHERE id_juez = %d", this.id);
-            if (rs.next()) {
-                if (rs.getInt(1) >= MAX_VOTES) {
-                    return false;
-                }
+            ResultSet rs = Database.query("SELECT COUNT(*) FROM Votos WHERE id_juez = %d", this.id);
+            if (rs.next() && rs.getInt(1) >= MAX_VOTES) {
+                return false;
             }
             
-            rs = Database.query("SELECT id Votos WHERE id_juez = %d AND id_articulo = %d", this.id, articulo.getId());
+            if (voted(articuloId) || articulo.isPublished()) {
+                return false;
+            }
             
         } catch (SQLException ex) {
             Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return true;
+    }
+    
+    public void vote(Articulo articulo) {
+        if (!canVote(articulo)) {
+            return;
+        }
+        
+        try {
+            Database.update("INSERT INTO Votos (id_juez, id_articulo) VALUES (%d, %d)", this.id, articulo.getId());
+        } catch (SQLException ex) {
+            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public boolean voted(int articuloId) {
+        try {
+            ResultSet rs = Database.query("SELECT id_juez FROM Votos WHERE id_juez = %d AND id_articulo = %d", this.id, articuloId);
+            return rs.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false;
+    }
+
+    public boolean isAuthor() {
+        return this.tipo == 0;
+    }
+
+    public boolean isJudge() {
+        return this.tipo == 1;
+    }
+
+    public boolean isChief() {
+        return this.tipo == 2;
     }
 
 }

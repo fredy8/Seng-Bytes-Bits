@@ -5,13 +5,9 @@
  */
 package Interfaces;
 
-import Database.Database;
 import Entidades.Articulo;
 import Entidades.Editor;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,8 +19,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author alfredo_altamirano
  */
-@WebServlet(name = "VerArticulo", urlPatterns = {"/Articulo"})
-public class VerArticulo extends HttpServlet {
+@WebServlet(name = "Votar", urlPatterns = {"/Votar"})
+public class Votar extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,43 +33,11 @@ public class VerArticulo extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        
-        int id = Integer.parseInt(request.getParameter("id"));
-        Articulo articulo = Articulo.getById(id);
-        List<Editor> editores = articulo.getEditores();
-        
-        try (PrintWriter out = response.getWriter()) {
-            Template.writeHeader(out, articulo.getTitulo(), request.getRequestURI());
-            
-            out.write("<h3>Título</h3><br>");
-            out.write(articulo.getTitulo() + editores.size());
-            out.write("<h3>Texto</h3>");
-            out.write("<textarea class='form-control' readonly>" + articulo.getTexto() + "</textarea>");
-            
-            
-            out.write("<h3>Autores</h3>");
-            out.write("<ul>");
-            editores.forEach((Editor editor) -> {
-                out.write("<li>");
-                out.write(editor.getFullName());
-                out.write("</li>");
-            });
-            out.write("</ul>");
-            
-            HttpSession session = request.getSession();
-            Editor editor = (Editor) session.getAttribute("editor");
-            if (editor != null) {
-                if (editor.canVote(articulo)) {
-                    out.write("<form action='Votar?id=" + id + "' method='POST'>");
-                    out.write("<input type='submit' class='btn btn-primary pull-right' value='Votar'>");
-                } else if (editor.voted(articulo.getId())) {
-                    out.write("<h3><span class='label label-default pull-right'>Votado</span></h3>");
-                }
-            }
-            
-            Template.writeFooter(out);
-        }
+        HttpSession session = request.getSession();
+        Editor editor = (Editor) session.getAttribute("editor");
+        int articuloId = Integer.parseInt(request.getParameter("id"));
+        editor.vote(Articulo.getById(articuloId));
+        response.sendRedirect("Articulos");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -88,7 +52,6 @@ public class VerArticulo extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**

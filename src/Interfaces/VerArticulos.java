@@ -1,6 +1,7 @@
 package Interfaces;
 
 import Entidades.Articulo;
+import Entidades.Editor;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "VerArticulos", urlPatterns = {"/Articulos"})
 public class VerArticulos extends HttpServlet {
@@ -30,20 +32,41 @@ public class VerArticulos extends HttpServlet {
             Template.writeHeader(out, "Artículos", request.getRequestURI());
             out.write("<h1 class='text-center'>Listado de Artículos</h1>");
 
+            HttpSession session = request.getSession();
+            Editor editor = (Editor) session.getAttribute("editor");
+            
             List<Articulo> articulos = Articulo.getAll();
-            String table;
-            table = "<table class='table'><thead><tr>" +
-                    "<th style='width:30%;'>Título</th>" +
-                    "<th style='width:70%;'>Resumen Breve</th>" +
-                    "</tr></thead><tbody>";
-            out.write(table);
-
+            out.write("<table class='table'><thead><tr>");
+            if (editor != null) {
+                out.write("<th style='width:25%;'>Título</th>");
+                out.write("<th style='width:65%;'>Resumen Breve</th>");
+                if (editor.isJudge()) {
+                    out.write("<th style='width:10%;'>Votado</th>");
+                } else if (editor.isChief()) {
+                    out.write("<th style='width:10%;'>Votos</th>");
+                }
+            } else {
+                out.write("<th style='width:30%;'>Título</th>");
+                out.write("<th style='width:70%;'>Resumen Breve</th>");
+            }
+            out.write("</tr></thead><tbody>");
+            
             for (Articulo articulo : articulos) {
-                String html = "<tr>" +
-                    "<td><a href='Articulo?id=" + articulo.getId() + "'>" + articulo.getTitulo() +"</a></td>" +
-                    "<td>" + articulo.getResumen() +"</td>" +
-                  "</tr>";
-                out.write(html);
+                out.write("<tr>");
+                out.write("<td><a href='Articulo?id=" + articulo.getId() + "'>" + articulo.getTitulo() + "</a></td>");
+                out.write("<td>" + articulo.getResumen() +"</td>");
+                out.write("<td>");
+                if (editor != null) {
+                    if (editor.isJudge()) {
+                        if (editor.voted(articulo.getId())) {
+                            out.write("<span class='label label-default'>Votado</span>");
+                        }
+                    } else if (editor.isChief()) {
+                        out.write(articulo.getVotos() + "");
+                    }
+                }
+                out.write("</td>");
+                out.write("</tr>");
             }
             out.write("</tbody></table>");
             Template.writeFooter(out);

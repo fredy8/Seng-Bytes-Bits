@@ -18,6 +18,7 @@ CREATE TABLE Suscriptor (
 	nombre VARCHAR(100) NOT NULL,
 	apellido VARCHAR(100) NOT NULL,
 	direccion VARCHAR(100) NOT NULL,
+	tarjeta_de_credito VARCHAR(100) NOT NULL,
 	PRIMARY KEY(id)
 );
 
@@ -45,6 +46,13 @@ CREATE TABLE Articulo (
 	fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY(id),
 	FOREIGN KEY(id_revista) REFERENCES Revista(id)
+);
+
+CREATE TABLE Votos (
+	id_juez INT NOT NULL,
+	id_revista INT NOT NULL,
+	FOREIGN KEY(id_revista) REFERENCES Revista(id),
+	FOREIGN KEY(id_editor) REFERENCES Editor(id)
 );
 
 CREATE TABLE Editores_Articulos (
