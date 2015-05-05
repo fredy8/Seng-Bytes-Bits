@@ -78,9 +78,10 @@ public class VerArticulos extends HttpServlet {
             out.write("<form class='form-inline' action='Publicar' method='POST'>");
             out.write("<button onclick=\"window.location.href = 'CrearArticulo'; return false; \" class='btn btn-primary'>Crear Articulo</button>");
             if (editor != null && editor.isChief()) {
-                out.write("<input type='hidden' id='articulos'>");
+                out.write("<input type='hidden' id='articulos' name='articulos'>");
                 out.write("<script src='compilarArticulos.js'></script>");
                 out.write("<input onclick='compilarArticulos()' type='submit' style='margin: 20px;' class='btn btn-primary' id='publicar' disabled='disabled' value='Publicar Revista'>");
+                out.write("<input type='text' class='form-control' name='titulo' placeholder='Título'>");
             }
             out.write("</form>");
             Template.writeFooter(out);
