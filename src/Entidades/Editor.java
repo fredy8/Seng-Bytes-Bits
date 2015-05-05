@@ -14,6 +14,7 @@ public class Editor {
     private int id = -1, tipo;
     private String username, password, nombre, apellido;
     private Timestamp fecha_de_miembro;
+    private final int MAX_VOTES = 9;
 
     public Editor(String username, String password, String nombre, String apellido, int tipo) {
         this.username = username;
@@ -60,12 +61,12 @@ public class Editor {
     public static Editor authenticate(String username, String password) {
         Editor editor = null;
         try {
-            ResultSet rs = Database.query("SELECT id, username, password, nombre, apellido FROM Editor WHERE username = '%s' and password = '%s'", username, password);
+            ResultSet rs = Database.query("SELECT id, username, password, nombre, apellido, tipo, fecha_de_miembro FROM Editor WHERE username = '%s' and password = '%s'", username, password);
             if (!rs.next()) {
                 return null;
             }
             
-            editor = new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"));
+            editor = new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"), rs.getInt("tipo"));
             editor.id = rs.getInt("id");
         } catch (SQLException ex) {
             Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
@@ -75,6 +76,24 @@ public class Editor {
     }
 
     public boolean canVote(Articulo articulo) {
+        if (this.tipo != 1) {
+            return false;
+        }
+        
+        try {
+            ResultSet rs = Database.query("SELECT COUNT(*) Votos WHERE id_juez = %d", this.id);
+            if (rs.next()) {
+                if (rs.getInt(1) >= MAX_VOTES) {
+                    return false;
+                }
+            }
+            
+            rs = Database.query("SELECT id Votos WHERE id_juez = %d AND id_articulo = %d", this.id, articulo.getId());
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return true;
     }
 

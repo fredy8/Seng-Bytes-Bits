@@ -93,9 +93,9 @@ public class Articulo {
         List<Editor> editores = new ArrayList<>();
         String ids = String.join(",", this.idEditores.stream().map((Integer id) -> Integer.toString(id)).collect(Collectors.toList()));
         try {
-            ResultSet rs = Database.query("SELECT username, password, nombre, apellido FROM Editor WHERE id in (%s)", ids);
+            ResultSet rs = Database.query("SELECT username, password, nombre, apellido, tipo, fecha_de_miembro FROM Editor WHERE id in (%s)", ids);
             while(rs.next()) {
-                editores.add(new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido")));
+                editores.add(new Editor(rs.getString("username"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"), rs.getInt("tipo")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
