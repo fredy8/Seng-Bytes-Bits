@@ -5,6 +5,7 @@
  */
 package Interfaces;
 
+import Controles.ControlVotar;
 import Entidades.Articulo;
 import Entidades.Editor;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class Votar extends HttpServlet {
         HttpSession session = request.getSession();
         Editor editor = (Editor) session.getAttribute("editor");
         int articuloId = Integer.parseInt(request.getParameter("id"));
-        editor.vote(Articulo.getById(articuloId));
+        ControlVotar.vote(editor, Articulo.getById(articuloId));
         response.sendRedirect("Articulos");
     }
 

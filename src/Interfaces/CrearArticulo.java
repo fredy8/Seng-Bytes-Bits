@@ -5,6 +5,7 @@
  */
 package Interfaces;
 
+import Controles.ControlAltaArticulo;
 import Entidades.Articulo;
 import Entidades.Editor;
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class CrearArticulo extends HttpServlet {
         String texto = request.getParameter("texto");
         List<Integer> idEditores = Arrays.asList(request.getParameter("autores").split(",")).stream().mapToInt((String str) -> Integer.parseInt(str)).boxed().collect(Collectors.toList());
         
-        new Articulo(titulo, texto, idEditores).guardar();
+        ControlAltaArticulo.altaArticulo(new Articulo(titulo, texto, idEditores));
         
         response.sendRedirect("Articulos");
     }

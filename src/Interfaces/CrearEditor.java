@@ -5,6 +5,7 @@
  */
 package Interfaces;
 
+import Controles.ControlAltaEditor;
 import Entidades.Editor;
 import Entidades.Editor;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class CrearEditor extends HttpServlet {
         String apellido = request.getParameter("apellido");
         int tipo = Integer.parseInt(request.getParameter("tipo"));
         
-        new Editor(username, password, nombre, apellido, tipo).guardar();
+        ControlAltaEditor.altaEditor(new Editor(username, password, nombre, apellido, tipo));
         response.sendRedirect("Articulos");
     }
     

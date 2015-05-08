@@ -5,6 +5,7 @@
  */
 package Interfaces;
 
+import Controles.ControlAltaSuscriptor;
 import Entidades.Articulo;
 import Entidades.Suscriptor;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class CrearSuscriptor extends HttpServlet {
         String direccion = request.getParameter("direccion");
         String tarjeta_de_credito = request.getParameter("tarjeta_de_credito");
         
-        new Suscriptor(nombre, apellido, direccion, tarjeta_de_credito).guardar();
+        ControlAltaSuscriptor.altaSuscriptor(new Suscriptor(nombre, apellido, direccion, tarjeta_de_credito));
         response.sendRedirect("Suscriptores");
     }
     

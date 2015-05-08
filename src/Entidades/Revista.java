@@ -33,24 +33,6 @@ public class Revista {
         return new ArrayList<>(idArticulos);
     }
     
-    public void guardar() {
-        try {
-            Database.update("INSERT INTO Revista (titulo) VALUES ('%s')", this.titulo);
-            ResultSet rs = Database.query("SELECT id FROM Revista ORDER BY id DESC LIMIT 1");
-            this.id = !rs.next() ? -1 : rs.getInt(1);
-            this.idArticulos.forEach((Integer idArticulo) -> {
-                try {
-                    Database.update("UPDATE Articulo SET id_revista = %d where id = %d", this.id, idArticulo);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
-            Database.update("DELETE FROM Votos");
-        } catch (SQLException ex) {
-            Logger.getLogger(Revista.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
     public static List<Revista> getAll() throws SQLException {
         Map<Integer, Revista> revistas = new HashMap<>();
         
@@ -67,5 +49,13 @@ public class Revista {
         }
         
         return new ArrayList<>(revistas.values());
+    }
+    
+    public String getTituto() {
+        return titulo;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
