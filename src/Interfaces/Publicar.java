@@ -5,6 +5,7 @@
  */
 package Interfaces;
 
+import Controles.ControlAltaRevista;
 import Entidades.Revista;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -38,7 +39,7 @@ public class Publicar extends HttpServlet {
         
         List<Integer> idArticulos = Arrays.asList(request.getParameter("articulos").split(",")).stream().mapToInt((String str) -> Integer.parseInt(str)).boxed().collect(Collectors.toList());
         String titulo = request.getParameter("titulo");
-        new Revista(titulo, idArticulos).guardar();
+        ControlAltaRevista.altaRevista(new Revista(titulo, idArticulos));
         
         response.sendRedirect("Articulos");
         

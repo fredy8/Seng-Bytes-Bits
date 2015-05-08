@@ -49,23 +49,6 @@ public class Articulo {
         
         return new ArrayList<>(articulos.values());
     }
-    
-    public void guardar() {
-        try {
-            Database.update("INSERT INTO Articulo (titulo, texto) VALUES ('%s', '%s')", this.titulo, this.texto);
-            ResultSet rs = Database.query("SELECT id FROM Articulo ORDER BY id DESC LIMIT 1");
-            this.id = !rs.next() ? -1 : rs.getInt(1);
-            this.idEditores.forEach((Integer idEditor) -> {
-                try {
-                    Database.update("INSERT INTO Editores_Articulos (id_articulo, id_editor) VALUES (%d, %d)", this.id, idEditor);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
-        } catch (SQLException ex) {
-            Logger.getLogger(Articulo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     public String getTitulo(){
         return titulo;
@@ -141,6 +124,14 @@ public class Articulo {
     public boolean authorsPublishedRecently() {
         List<Editor> editores = this.getEditores();
         return editores.stream().anyMatch((Editor e) -> e.recentlyPublished());
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Integer> getIdEditores() {
+        return new ArrayList<>(idEditores);
     }
     
 }

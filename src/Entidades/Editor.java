@@ -40,16 +40,6 @@ public class Editor {
         return editores;
     }
     
-    public void guardar() {
-        try {
-            Database.update("INSERT INTO Editor (username, password, nombre, apellido, tipo) VALUES ('%s', '%s', '%s', '%s', %d)", this.username, this.password, this.nombre, this.apellido, this.tipo);
-            ResultSet rs = Database.query("SELECT id FROM Editor ORDER BY id DESC LIMIT 1");
-            this.id = !rs.next() ? -1 : rs.getInt(1);
-        } catch (SQLException ex) {
-            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
     public int getId() {
         return id;
     }
@@ -102,18 +92,6 @@ public class Editor {
         return true;
     }
     
-    public void vote(Articulo articulo) {
-        if (!canVote(articulo)) {
-            return;
-        }
-        
-        try {
-            Database.update("INSERT INTO Votos (id_juez, id_articulo) VALUES (%d, %d)", this.id, articulo.getId());
-        } catch (SQLException ex) {
-            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
     public boolean voted(int articuloId) {
         try {
             ResultSet rs = Database.query("SELECT id_juez FROM Votos WHERE id_juez = %d AND id_articulo = %d", this.id, articuloId);
@@ -148,4 +126,28 @@ public class Editor {
         return false;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public String getNombre() {
+        return nombre;
+    }
+    
+    public String getApellido() {
+        return apellido;
+    }
+    
+    public int getTipo() {
+        return tipo;
+    }
+    
 }
