@@ -5,6 +5,7 @@
  */
 package Interfaces;
 
+import Controles.ControlSesion;
 import Entidades.Editor;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -70,7 +71,7 @@ public class Login extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
-        Editor editor = Editor.authenticate(username, password);
+        Editor editor = ControlSesion.abrirSesion(username, password);
         if (editor != null) {
             HttpSession session = request.getSession();
             session.setAttribute("editor", editor);
