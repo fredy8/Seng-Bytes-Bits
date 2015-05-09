@@ -33,22 +33,27 @@ public class Revista {
         return new ArrayList<>(idArticulos);
     }
     
-    public static List<Revista> getAll() throws SQLException {
-        Map<Integer, Revista> revistas = new HashMap<>();
-        
-        ResultSet rs = Database.query("SELECT Revista.id, Articulo.id, Revista.titulo FROM Revista, Articulo WHERE Revista.id = Articulo.id_revista");
-        while(rs.next()) {
-            int id = rs.getInt("Revista.id");
-            if (!revistas.containsKey(id)) {
-                Revista revista = new Revista(rs.getString("titulo"), new ArrayList<>());
-                revista.id = id;
-                revistas.put(id, revista);
+    public static List<Revista> getAll() {
+        try {
+            Map<Integer, Revista> revistas = new HashMap<>();
+            
+            ResultSet rs = Database.query("SELECT Revista.id, Articulo.id, Revista.titulo FROM Revista, Articulo WHERE Revista.id = Articulo.id_revista");
+            while(rs.next()) {
+                int id = rs.getInt("Revista.id");
+                if (!revistas.containsKey(id)) {
+                    Revista revista = new Revista(rs.getString("titulo"), new ArrayList<>());
+                    revista.id = id;
+                    revistas.put(id, revista);
+                }
+                int idArticulo = rs.getInt("Articulo.id");
+                revistas.get(id).idArticulos.add(idArticulo);
             }
-            int idArticulo = rs.getInt("Articulo.id");
-            revistas.get(id).idArticulos.add(idArticulo);
+            
+            return new ArrayList<>(revistas.values());
+        } catch (SQLException ex) {
+            Logger.getLogger(Revista.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return new ArrayList<>(revistas.values());
+        return null;
     }
     
     public String getTituto() {

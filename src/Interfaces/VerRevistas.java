@@ -5,6 +5,8 @@
  */
 package Interfaces;
 
+import Controles.ControlObtenerArticulos;
+import Controles.ControlObtenerRevistas;
 import Entidades.Articulo;
 import Entidades.Revista;
 import java.io.IOException;
@@ -47,8 +49,7 @@ public class VerRevistas extends HttpServlet {
             out.write("<th style='width:60%'>Artículos</th>");
             out.write("</tr></thead><tbody>");
             
-            List<Revista> revistas = Revista.getAll();
-            
+            List<Revista> revistas = ControlObtenerRevistas.obtenerRevistas();
             
             for (Revista revista : revistas) {
                 Integer counter = 1;
@@ -57,14 +58,13 @@ public class VerRevistas extends HttpServlet {
                 out.write("<td>");
                 
                 for (Integer idArticulo : revista.getIdArticulos()) {
-                    Articulo articulo = Articulo.getById(idArticulo);
+                    Articulo articulo = ControlObtenerArticulos.getArticuloById(idArticulo);
                     out.write("<a href='Articulo?id=" + idArticulo.toString() + "'>" + counter.toString() + ".- <i>" + articulo.getTitulo() + "</i></a><br>");
                     counter = counter + 1;
                 }
                
                 out.write("</td>");
                 out.write("</tr>");
-                
             }
             
             out.write("</tbody></table>");

@@ -5,6 +5,7 @@
  */
 package Interfaces;
 
+import Controles.ControlObtenerSuscriptores;
 import Entidades.Editor;
 import Entidades.Suscriptor;
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class VerSuscriptores extends HttpServlet {
             Template.writeHeader(out, "Suscriptores", request.getRequestURI());
             out.write("<h1 class='text-center'>Listado de Suscriptores</h1>");
 
-            List<Suscriptor> suscriptores = Suscriptor.getAll();
+            List<Suscriptor> suscriptores = ControlObtenerSuscriptores.obtenerSuscriptores();
             String table;
             table = "<table class='table'><thead><tr>" +
                     "<th style='width:25%;'>Nombre Completo</th>" +
